@@ -1,0 +1,52 @@
+#include <iostream>
+
+template<typename T>
+class TDynamicStack
+{
+    int top;
+    size_t memSize;
+    T* pMem;
+
+    void resize() {
+        size_t newSize = memSize * 2;
+        T* newMem = new T[newSize];
+        for (int i = 0; i <= top; i++) {
+            newMem[i] = pMem[i];
+        }
+        delete[] pMem;
+        pMem = newMem;
+        memSize = newSize;
+    }
+
+public:
+    TDynamicStack(size_t _memSize = 10) : top(-1), memSize(_memSize), pMem(new T[memSize]) {}
+    ~TDynamicStack() {delete[] pMem;}
+    TDynamicStack(const TDynamicStack& other) : top(other.top), memSize(other.memSize), pMem(new T[memSize]) {
+        for (int i = 0; i <= top; i++) {
+            pMem[i] = other.pMem[i];
+        }
+    }
+    TDynamicStack& operator=(const TDynamicStack& other) {
+        if (this != &other) {
+            delete[] pMem;
+            top = other.top;
+            memSize = other.memSize;
+            pMem = new T[memSize];
+            for (int i = 0; i <= top; i++) {
+                pMem[i] = other.pMem[i];
+            }
+        }
+        return *this;
+    }
+    size_t size() const {return top + 1;}
+    bool IsEmpty() const {return top == -1;}
+    bool IsFull() const {return top == static_cast<int>(memSize) - 1;}
+    T Pop() {return pMem[top--];}
+    void Push(const T& val) {
+        if (IsFull()) {
+            resize();
+        }
+        pMem[++top] = val;
+    }
+    T Peek() const {return pMem[top];}
+};
