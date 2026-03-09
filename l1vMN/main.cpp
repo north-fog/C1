@@ -303,7 +303,7 @@ int main() {
                 flagg = 0;  // Завершаем цикл
                 break;
                 
-                5
+                
             default:
                 std::cout << "Ошибка: неверный пункт меню!" << std::endl;
                 break;

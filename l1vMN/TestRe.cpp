@@ -6,8 +6,9 @@ using namespace std;
 int main() {
     setlocale(LC_ALL, "Russian");
     
-    int n, m, k, count;
-    
+    int t, n, m, k, count;
+    t=1;
+    while( t>0){
     cout << "Тестирование программ поддержки множества" << endl;
     cout << "              Решето Эратосфена" << endl;
     cout << "Введите верхнюю границу целых значений - ";
@@ -58,5 +59,7 @@ int main() {
     
     cout << "В первых " << n << " числах " << count << " простых" << endl;
     
-    return 0;
+    cout << "хотите повторить тест(1 - да, 0 - нет)?:";
+    cin >> t;
+}
 }
