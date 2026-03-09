@@ -1,57 +1,51 @@
 #include "TSet.h"
+#include <iostream>
+using namespace std;
+//расмотреть возможность переделать на  явную иницализацию
 
-// Конструктор: создает пустое множество заданной мощности
-// mp - максимальная мощность (максимальное значение элемента + 1)
-TSet::TSet(int mp) : MaxPower(mp), BitFild(mp) {
-    // Список инициализации:
-    // MaxPower = mp - запоминаем мощность
-    // BitFild(mp) - создаем битовое поле длиной mp (все биты = 0)
-    // Тело конструктора пустое, так как вся работа сделана в списке инициализации
-}
+TSet::TSet(int mp):
+ MaxPower(mp), 
+ BitFild(mp) {}
 
-// Конструктор копирования
-TSet::TSet(const TSet& s) : MaxPower(s.MaxPower), BitFild(s.BitFild) {
-    // Копируем мощность из исходного множества
-    // Копируем битовое поле через конструктор копирования TBitField
-}
 
-// Конструктор преобразования из битового поля
-// Создает множество на основе готового битового поля
-TSet::TSet(const TBitField& bf) : MaxPower(bf.GetLen()), BitFild(bf) {
-    // MaxPower = длина битового поля (количество возможных элементов)
-    // BitFild(bf) - инициализируем битовое поле копией переданного
-}
+TSet::TSet(const TSet& s): 
+MaxPower(s.MaxPower), 
+BitFild(s.BitFild) {}
 
-// Оператор преобразования в битовое поле
-// Возвращает копию внутреннего битового поля
+
+TSet::TSet(const TBitField& bf):
+MaxPower(bf.GetLen()),
+BitFild(bf) {}
+
+
 TSet::operator TBitField() {
-    TBitField tmp(this->BitFild);  // Создаем копию битового поля
-    return tmp;                     // Возвращаем копию
+    TBitField tmp(this->BitFild);  
+    return tmp;                     
 }
 
-// Добавление элемента в множество
-void TSet::InsLem(const int elem) {
-    // Устанавливаем соответствующий бит в 1
-    // Если elem вне диапазона 0..MaxPower-1, SetBit сам проигнорирует
-    BitFild.SetBit(elem);
+
+void TSet::InsElem(const int elem) {
+    if (elem >= 0 && elem < MaxPower) {
+        BitFild.SetBit(elem);  // Устанавливаем бит
+    }
 }
 
-// Удаление элемента из множества
-void TSet::DelLem(const int elem) {
-    // Очищаем соответствующий бит (устанавливаем в 0)
-    BitFild.ClrBit(elem);
+
+void TSet::DelElem(const int elem) {
+    if (elem >= 0 && elem < MaxPower) {
+        BitFild.ClrBit(elem);  // Очищаем соответствующий бит
+    }
 }
 
-// Проверка принадлежности элемента множеству
 int TSet::isMember(const int elem) const {
-    // Возвращаем значение бита (0 или 1)
-    return BitFild.GetBit(elem);
+    if (elem >= 0 && elem < MaxPower) {
+        return BitFild.GetBit(elem);
+    }
+    return 0;
 }
 
-// Оператор сравнения множеств на равенство
 int TSet::operator==(const TSet& s) {
-    // Сравниваем битовые поля через оператор == класса TBitField
-    return (BitFild == s.BitFild);
+   return (BitFild == s.BitFild);
 }
 
 // Оператор присваивания
@@ -61,27 +55,56 @@ TSet& TSet::operator=(const TSet& s) {
     return *this;           // Возвращаем ссылку на текущий объект
 }
 
-// Оператор объединения множеств (A ? B)
+// Оператор объединения множеств (A ? B) 
 TSet TSet::operator+(const TSet& s) {
-    // Используем побитовое ИЛИ битовых полей
-    // Результат - новое множество, содержащее элементы из обоих исходных
     TSet res(BitFild | s.BitFild);
     return res;
 }
 
-// Оператор пересечения множеств (A ? B)
+
 TSet TSet::operator*(const TSet& s) {
-    // Используем побитовое И битовых полей
-    // Результат - новое множество, содержащее элементы, принадлежащие обоим
     TSet res(BitFild & s.BitFild);
     return res;
 }
 
-// Оператор дополнения множества (¬A)
-// Все элементы универсума, кроме тех, что в текущем множестве
 TSet TSet::operator~() {
-    // Используем побитовое НЕ битового поля
-    // Затем маскируем лишние биты (это делает operator~ класса TBitField)
     TSet res(~BitFild);
     return res;
+}
+ostream& operator<<(ostream& os, const TSet& s) {
+    os << "{ ";
+    bool first = true;
+    
+    for (int i = 0; i < s.MaxPower; i++) {
+        if (s.isMember(i)) {
+            if (!first) {
+                os << ", ";
+            }
+            os << i;
+            first = false;
+        }
+    }
+    
+    os << " }";
+    return os;
+}
+
+istream& operator>>(istream& is, TSet& s) {
+    // Очищаем множество
+    for (int i = 0; i < s.MaxPower; i++) {
+        s.DelElem(i);
+    }
+    
+    int elem;
+    while (is >> elem) {
+        if (elem >= 0 && elem < s.MaxPower) {
+            s.InsElem(elem);
+        }
+        if (is.peek() == '\n') {
+            is.get();
+            break;
+        }
+    }
+    
+    return is;
 }

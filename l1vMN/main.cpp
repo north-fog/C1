@@ -16,6 +16,9 @@ void menu() {
         << "9. Выход." << "\n";
 }
 
+void printBitField(const char* name, const TBitField& bf) {
+    std::cout << name << " (битовое поле): " << bf << std::endl;
+}
 int main() {
     setlocale(LC_ALL, "Rus");  // Устанавливаем русскую локаль для вывода
     
@@ -35,17 +38,20 @@ int main() {
     
     TSet t1(len1);  // Создаем первое множество
     std::cout << "Пустое множество: " << t1 << std::endl;
+    printBitField("t1", t1.operator TBitField());
     
     // Ввод элементов первого множества
     std::cout << "Введите через пробел элементы множества (это должны быть целые значения): ";
     std::cin >> t1;  // Используется оператор >> класса TSet
     std::cout << "Результат (Множество № 1): " << t1 << std::endl;
+    printBitField("t1", t1.operator TBitField());  // Вывод битового поля
     
     int len2;
     // Ввод длины второго множества
     do {
         std::cout << "Введите длину желаемого множества № 2: ";
         std::cin >> len2;
+        
         
         // Очищаем буфер после ввода числа
         std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
@@ -56,11 +62,12 @@ int main() {
     } while (len2 <= 0);
     
     TSet t2(len2);  // Создаем второе множество
-    
+    printBitField("t2", t2.operator TBitField());  // Вывод битового поля
     // Ввод элементов второго множества
     std::cout << "Введите через пробел элементы множества (это должны быть целые значения): ";
     std::cin >> t2;
     std::cout << "Результат (Множество № 2): " << t2 << std::endl;
+    printBitField("t2", t2.operator TBitField());  // Вывод битового поля
     
     int flag, n, count;  // Переменные для выбора пункта меню, элемента и номера множества
     int flagg = 1;  // Флаг для работы цикла (1 - продолжаем, 0 - выход)
@@ -110,7 +117,7 @@ int main() {
                     }
                     else {
                         std::cout << "Множество № 1 до: " << t1 << std::endl;
-                        t1.InsLem(n);  // Добавляем элемент
+                        t1.InsElem(n);  // Добавляем элемент
                         std::cout << "Результат (Добавился элемент " << n << "): " << t1 << std::endl;
                     }
                 }
@@ -120,7 +127,7 @@ int main() {
                     }
                     else {
                         std::cout << "Множество № 2 до: " << t2 << std::endl;
-                        t2.InsLem(n);
+                        t2.InsElem(n);
                         std::cout << "Результат (Добавился элемент " << n << "): " << t2 << std::endl;
                     }
                 }
@@ -144,7 +151,7 @@ int main() {
                 if (count == 1) {
                     if (n >= 0 && n < len1) {
                         std::cout << "Множество № 1 до: " << t1 << std::endl;
-                        t1.DelLem(n);  // Удаляем элемент
+                        t1.DelElem(n);  // Удаляем элемент
                         std::cout << "Результат (Удалился элемент " << n << "): " << t1 << std::endl;
                     }
                     else {
@@ -154,7 +161,7 @@ int main() {
                 else {
                     if (n >= 0 && n < len2) {
                         std::cout << "Множество № 2 до: " << t2 << std::endl;
-                        t2.DelLem(n);
+                        t2.DelElem(n);
                         std::cout << "Результат (Удалился элемент " << n << "): " << t2 << std::endl;
                     }
                     else {

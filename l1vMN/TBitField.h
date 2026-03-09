@@ -2,16 +2,15 @@
 
 #include <iostream>  // Для ввода/вывода
 
-// Определение типа для хранения элементов битового поля
-// unsigned int занимает обычно 32 бита, что удобно для хранения 32 бит в одном элементе
 typedef unsigned int TELEM;
 
 class TBitField
 {
+private:
     // Приватные поля класса (доступны только внутри класса)
-    int BitLen;      // Длина битового поля в битах (сколько всего битов)
-    TELEM* pMem;     // Указатель на динамический массив, где хранятся биты
-    int MemLen;      // Длина массива pMem в элементах TELEM (сколько элементов по 32 бита)
+    int BitLen;      
+    TELEM *pMem;    
+    int MemLen;     
     
     // Приватные вспомогательные методы (только для внутреннего использования)
     
@@ -27,7 +26,7 @@ public:
     // Конструкторы и деструктор
     
     // Конструктор: создает битовое поле длины len (все биты = 0)
-    TBitField(int len);
+    TBitField(const int len); //!!!
     
     // Конструктор копирования: создает копию существующего битового поля
     TBitField(const TBitField& bf);
@@ -61,11 +60,11 @@ public:
     
     // Оператор И (побитовое И) для двух битовых полей
     // Используется для пересечения множеств
-    TBitField operator&(const TBitField bf);
+    TBitField operator&(const TBitField &bf);
     
     // Оператор ИЛИ (побитовое ИЛИ) для двух битовых полей
     // Используется для объединения множеств
-    TBitField operator|(const TBitField bf);
+    TBitField operator|(const TBitField &bf);
     
     // Оператор НЕ (побитовое отрицание) для битового поля
     // Используется для дополнения множества
@@ -74,35 +73,11 @@ public:
     // Дружественные функции для ввода/вывода
     // friend означает, что эти функции имеют доступ к приватным полям класса
     
+
+
+    //Перенести в TBFcpp!!!!!!!!!
     // Оператор вывода: выводит битовое поле как строку из 0 и 1
-    friend std::ostream& operator<<(std::ostream& out, const TBitField& bf) {
-        // Проходим по всем битам от 0 до BitLen-1
-        for (int i = 0; i < bf.BitLen; i++) {
-            // Если бит установлен (равен 1), выводим '1', иначе '0'
-            if (bf.GetBit(i)) {
-                out << '1';
-            }
-            else out << '0';
-        }
-        return out;  // Возвращаем поток для цепочки вызовов
-    }
-    
-    // Оператор ввода: читает битовое поле как строку из 0 и 1
-    friend std::istream& operator>>(std::istream& is, TBitField& bf) {
-        // Читаем ровно BitLen символов
-        for (int i = 0; i < bf.BitLen; i++) {
-            char tmp;      // Временная переменная для хранения символа
-            is >> tmp;     // Читаем один символ из потока
-            
-            if (tmp == '0') {
-                bf.ClrBit(i);  // Если '0' - очищаем бит
-            }
-            else if (tmp == '1') {
-                bf.SetBit(i);  // Если '1' - устанавливаем бит
-            }
-            else break;  // Если не '0' и не '1' - прерываем ввод
-        }
-        return is;  // Возвращаем поток для цепочки вызовов
-    }
+    friend std::ostream& operator<<(std::ostream& out, const TBitField& bf);
+    friend std::istream& operator>>(std::istream& is, TBitField& bf);
 };
 

@@ -1,5 +1,6 @@
-
 #include "TBitField.h"
+#include <iostream>  // для cout в предупреждениях
+using namespace std;
 
 // Возвращает индекс элемента в массиве для бита n
 // Использует сдвиг вправо на 5 (деление на 32) для скорости
@@ -14,19 +15,22 @@ TELEM TBitField::GetMemMask(const int n) const {
 }
 
 // Конструктор: создает битовое поле длины len
-TBitField::TBitField(int len) : BitLen(len) {
+TBitField::TBitField(const int len) : BitLen(len) {
+    // Проверка на корректность длины
+    if (len <= 0) {
+        throw "Ошибка в конструкторе TBitField: длина должна быть положительной!";
+    }
+    
     // Вычисляем, сколько элементов TELEM нужно для хранения len бит
     // (len + 31) >> 5 - это округление вверх при делении на 32
     MemLen = (len + 31) >> 5;
     
-    // Выделяем динамическую память под массив
-    pMem = new TELEM[MemLen];
+    // Выделяем динамическую память под массив и инициализируем всё 0
+    pMem = new TELEM[MemLen]();
     
-    // Инициализируем все биты нулями
-    if (pMem != nullptr) {  // Проверка, что память выделилась
-        for (int i = 0; i < MemLen; i++) {
-            pMem[i] = 0;  // 0 означает, что все 32 бита равны 0
-        }
+    // Проверка, что память выделилась
+    if (pMem == nullptr) {
+        throw "Ошибка в конструкторе TBitField: не удалось выделить память!";
     }
 }
 
@@ -37,58 +41,74 @@ TBitField::TBitField(const TBitField& bf) {
     MemLen = bf.MemLen;
     
     // Выделяем новую память такого же размера
-    pMem = new TELEM[MemLen];
+    pMem = new TELEM[MemLen]();
+    
+    // Проверка, что память выделилась
+    if (pMem == nullptr) {
+        throw "Ошибка в конструкторе копирования TBitField: не удалось выделить память!";
+    }
     
     // Копируем данные из исходного объекта в новый
-    if (pMem != nullptr) {
-        for (int i = 0; i < MemLen; i++) {
-            pMem[i] = bf.pMem[i];  // Копируем каждый элемент массива
-        }
+    for (int i = 0; i < MemLen; i++) {
+        pMem[i] = bf.pMem[i];  // Копируем каждый элемент массива
     }
 }
 
 // Деструктор: освобождает выделенную память
 TBitField::~TBitField() {
-    if (pMem != nullptr) {   // Проверяем, что память была выделена
-        delete[] pMem;        // Освобождаем динамический массив
-    }
+    delete[] pMem;  // Освобождаем динамический массив
 }
 
 // Устанавливает бит n в 1
 void TBitField::SetBit(const int n) {
     // Проверяем, что n находится в допустимых пределах
-    if ((n >= 0) && (n < BitLen)) {
-        // OR с маской устанавливает нужный бит в 1
-        // Другие биты в этом элементе не изменяются
-        pMem[GetMemIndex(n)] |= GetMemMask(n);
+    if (n < 0) {
+        throw "Ошибка в SetBit: индекс бита не может быть отрицательным!";
     }
-    // Если n вне диапазона - просто ничего не делаем
+    if (n >= BitLen) {
+        throw "Ошибка в SetBit: индекс бита выходит за границы поля!";
+    }
+    
+    // OR с маской устанавливает нужный бит в 1
+    pMem[GetMemIndex(n)] |= GetMemMask(n);
 }
 
 // Устанавливает бит n в 0 (очищает)
 void TBitField::ClrBit(const int n) {
     // Проверяем, что n находится в допустимых пределах
-    if ((n >= 0) && (n < BitLen)) {
-        // AND с инвертированной маской очищает нужный бит
-        // Например: если маска = 00000100, то ~маска = 11111011
-        pMem[GetMemIndex(n)] &= ~GetMemMask(n);
+    if (n < 0) {
+        throw "Ошибка в ClrBit: индекс бита не может быть отрицательным!";
     }
+    if (n >= BitLen) {
+        throw "Ошибка в ClrBit: индекс бита выходит за границы поля!";
+    }
+    
+    // AND с инвертированной маской очищает нужный бит
+    pMem[GetMemIndex(n)] &= ~GetMemMask(n);
 }
 
 // Возвращает значение бита n (1 или 0)
 int TBitField::GetBit(const int n) const {
     // Проверяем, что n находится в допустимых пределах
-    if ((n >= 0) && (n < BitLen)) {
-        // AND с маской даст 0, если бит не установлен, и не 0, если установлен
-        // Затем сравниваем с 0, получая 1 (true) или 0 (false)
-        return (pMem[GetMemIndex(n)] & GetMemMask(n)) != 0;
+    if (n < 0) {
+        throw "Ошибка в GetBit: индекс бита не может быть отрицательным!";
     }
-    return 0;  // Для битов вне диапазона возвращаем 0
+    if (n >= BitLen) {
+        throw "Ошибка в GetBit: индекс бита выходит за границы поля!";
+    }
+    
+    // AND с маской даст 0, если бит не установлен, и не 0, если установлен
+    return (pMem[GetMemIndex(n)] & GetMemMask(n)) != 0;
 }
 
 // Оператор присваивания: копирует битовое поле bf в текущий объект
 TBitField& TBitField::operator=(const TBitField& bf) {
-    // Копируем длину в битах
+    // Проверка на самоприсваивание
+    if (this == &bf) {
+        cout << "Предупреждение в operator=: попытка самоприсваивания" << endl;
+        return *this;
+    }
+
     BitLen = bf.BitLen;
     
     // Если размер памяти разный, нужно перевыделить память
@@ -96,59 +116,55 @@ TBitField& TBitField::operator=(const TBitField& bf) {
         MemLen = bf.MemLen;  // Запоминаем новый размер
         
         // Освобождаем старую память
-        if (pMem != nullptr) {
-            delete[] pMem;
-        }
+        delete[] pMem;
         
         // Выделяем новую память
-        pMem = new TELEM[MemLen];
+        pMem = new TELEM[MemLen]();
+        
+        // Проверка, что память выделилась
+        if (pMem == nullptr) {
+            throw "Ошибка в operator=: не удалось выделить память!";
+        }
     }
     
     // Копируем данные
-    if (pMem != nullptr) {
-        for (int i = 0; i < MemLen; i++) {
-            pMem[i] = bf.pMem[i];  // Копируем каждый элемент
-        }
+    for (int i = 0; i < MemLen; i++) {
+        pMem[i] = bf.pMem[i];  // Копируем каждый элемент
     }
     
-    return *this;  // Возвращаем ссылку на текущий объект (для цепочки присваиваний)
+    return *this;  // Возвращаем ссылку на текущий объект
 }
 
 // Оператор сравнения: проверяет равенство двух битовых полей
 int TBitField::operator==(const TBitField& bf) {
-    int res = 1;  // Предполагаем, что равны (1 = истина)
-    
     // Если разная длина - сразу не равны
     if (BitLen != bf.BitLen) { 
-        res = 0; 
+    return 0; 
     }
-    else {
-        // Сравниваем каждый элемент массива
-        for (int i = 0; i < MemLen; i++) {
-            if (pMem[i] != bf.pMem[i]) {
-                res = 0;  // Нашли отличие
-                break;    // Дальше можно не проверять
-            }
+    
+    // Сравниваем каждый элемент массива
+    for (int i = 0; i < MemLen; i++) {
+        if (pMem[i] != bf.pMem[i]) {
+            return 0;  // Нашли отличие
         }
     }
-    return res;  // Возвращаем результат (1 - равны, 0 - не равны)
+    
+    return 1;  // Поля равны
 }
 
 // Оператор И (побитовое И) для двух битовых полей
-TBitField TBitField::operator&(const TBitField bf) {
+TBitField TBitField::operator&(const TBitField& bf) {
     // Берем минимальную длину (результат не может быть длиннее меньшего поля)
-    int min = BitLen;
-    int mm = MemLen;
-    if (bf.BitLen < min) {
-        min = bf.BitLen;
-        mm = bf.MemLen;
-    }
+    int minLen = (BitLen < bf.BitLen) ? BitLen : bf.BitLen;
     
     // Создаем временный объект минимальной длины
-    TBitField tmp(min);
+    TBitField tmp(minLen);
+    
+    // Определяем, сколько элементов массива нужно обработать
+    int minMem = (MemLen < bf.MemLen) ? MemLen : bf.MemLen;
     
     // Применяем побитовое И к элементам массивов
-    for (int i = 0; i < mm; i++) {
+    for (int i = 0; i < minMem; i++) {
         tmp.pMem[i] = pMem[i] & bf.pMem[i];
     }
     
@@ -156,15 +172,12 @@ TBitField TBitField::operator&(const TBitField bf) {
 }
 
 // Оператор ИЛИ (побитовое ИЛИ) для двух битовых полей
-TBitField TBitField::operator|(const TBitField bf) {
+TBitField TBitField::operator|(const TBitField& bf) {
     // Берем максимальную длину (результат должен вместить все биты из обоих полей)
-    int max = BitLen;
-    if (bf.BitLen > max) {
-        max = bf.BitLen;
-    }
+    int maxLen = (BitLen > bf.BitLen) ? BitLen : bf.BitLen;
     
     // Создаем временный объект максимальной длины
-    TBitField tmp(max);
+    TBitField tmp(maxLen);
     
     // Копируем данные из текущего объекта
     for (int i = 0; i < MemLen; i++) {
@@ -202,4 +215,51 @@ TBitField TBitField::operator~() {
 // Возвращает длину битового поля в битах
 int TBitField::GetLen() const {
     return BitLen;
+}
+
+    std::ostream& operator<<(std::ostream& out, const TBitField& bf) {
+    // Верхняя строка - сами биты
+    out << "Биты: ";
+    for (int i = 0; i < bf.BitLen; i++) {
+        out << (bf.GetBit(i) ? '1' : '0');
+        
+        if ((i + 1) % 8 == 0 && i != bf.BitLen - 1) {
+            out << " | ";  // разделитель между байтами
+        } else if (i != bf.BitLen - 1) {
+            out << ' ';
+        }
+    }
+    out << std::endl;
+    
+    // Нижняя строка - номера битов
+    out << "Номер: ";
+    for (int i = 0; i < bf.BitLen; i++) {
+        if (i < 10) {
+            out << i << ' ';
+        } else {
+            out << i << ' ';
+        }
+        
+        if ((i + 1) % 8 == 0 && i != bf.BitLen - 1) {
+            out << "  ";  // дополнительный отступ для разделителя
+        }
+    }
+    
+    return out;
+}
+
+
+istream& operator>>(istream& is, TBitField& bf) {
+    char ch;
+    for (int i = 0; i < bf.BitLen; i++) {
+        is >> ch;
+        if (ch == '1') {
+            bf.SetBit(i);
+        } else if (ch == '0') {
+            bf.ClrBit(i);
+        } else {
+            break;  // неверный символ — прерываем ввод
+        }
+    }
+    return is;
 }
