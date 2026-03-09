@@ -5,8 +5,8 @@
 
 // Функция вывода меню на экран
 void menu() {
-    std::cout << "1. Добавить элемент в множество )." << "\n"
-        << "2. Удалить элемент из множества ." << "\n"
+    std::cout << "1. Добавить элемент в множество." << "\n"
+        << "2. Удалить элемент из множества." << "\n"
         << "3. Проверить наличие элемента в множестве." << "\n"
         << "4. Присвоить одному множеству другое." << "\n"
         << "5. Сравнить два множества между собой на равенство." << "\n"
@@ -25,17 +25,17 @@ int main() {
     int len1;
     // Ввод длины первого множества с проверкой (должна быть > 0)
     do {
-        std::cout << "Введите длину желаемого множества № 1: ";
+        std::cout << "Введите мощность желаемого множества № 1: ";
         std::cin >> len1;
         
         // Очищаем буфер после ввода числа
         std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
         
         if (len1 <= 0) {
-            std::cout << "Ошибка: длина должна быть положительным числом!" << std::endl;
+            std::cout << "Ошибка: мощность должна быть положительным числом!" << std::endl;
         }
     } while (len1 <= 0);
-    
+    len1++;
     TSet t1(len1);  // Создаем первое множество
     std::cout << "Пустое множество: " << t1 << std::endl;
     printBitField("t1", t1.operator TBitField());
@@ -49,7 +49,7 @@ int main() {
     int len2;
     // Ввод длины второго множества
     do {
-        std::cout << "Введите длину желаемого множества № 2: ";
+        std::cout << "Введите мощность желаемого множества № 2: ";
         std::cin >> len2;
         
         
@@ -57,10 +57,10 @@ int main() {
         std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
         
         if (len2 <= 0) {
-            std::cout << "Ошибка: длина должна быть положительным числом!" << std::endl;
+            std::cout << "Ошибка: мощность должна быть положительным числом!" << std::endl;
         }
     } while (len2 <= 0);
-    
+    len2++;
     TSet t2(len2);  // Создаем второе множество
     printBitField("t2", t2.operator TBitField());  // Вывод битового поля
     // Ввод элементов второго множества
@@ -119,6 +119,7 @@ int main() {
                         std::cout << "Множество № 1 до: " << t1 << std::endl;
                         t1.InsElem(n);  // Добавляем элемент
                         std::cout << "Результат (Добавился элемент " << n << "): " << t1 << std::endl;
+                        printBitField("t1", t1.operator TBitField());
                     }
                 }
                 else {  // count == 2
@@ -129,6 +130,7 @@ int main() {
                         std::cout << "Множество № 2 до: " << t2 << std::endl;
                         t2.InsElem(n);
                         std::cout << "Результат (Добавился элемент " << n << "): " << t2 << std::endl;
+                        printBitField("t2", t2.operator TBitField());
                     }
                 }
                 break;
@@ -153,6 +155,7 @@ int main() {
                         std::cout << "Множество № 1 до: " << t1 << std::endl;
                         t1.DelElem(n);  // Удаляем элемент
                         std::cout << "Результат (Удалился элемент " << n << "): " << t1 << std::endl;
+                        printBitField("t1", t1.operator TBitField());
                     }
                     else {
                         std::cout << "Элемент " << n << " вне диапазона (0-" << len1-1 << ")" << std::endl;
@@ -163,6 +166,7 @@ int main() {
                         std::cout << "Множество № 2 до: " << t2 << std::endl;
                         t2.DelElem(n);
                         std::cout << "Результат (Удалился элемент " << n << "): " << t2 << std::endl;
+                        printBitField("t2", t2.operator TBitField());
                     }
                     else {
                         std::cout << "Элемент " << n << " вне диапазона (0-" << len2-1 << ")" << std::endl;
@@ -195,6 +199,7 @@ int main() {
                         else {
                             std::cout << "Результат: элемент " << n << " отсутствует в множестве № 1" << "\n";
                         }
+                        printBitField("t1", t1.operator TBitField());
                     }
                     else {
                         std::cout << "Элемент " << n << " вне диапазона (0-" << len1-1 << ")" << std::endl;
@@ -214,6 +219,7 @@ int main() {
                     else {
                         std::cout << "Элемент " << n << " вне диапазона (0-" << len2-1 << ")" << std::endl;
                     }
+                    printBitField("t2", t2.operator TBitField());
                 }
                 break;
                 
@@ -233,12 +239,14 @@ int main() {
                     std::cout << "Множество № 2: " << t2 << std::endl;
                     t1 = t2;  // Присваиваем t1 значение t2
                     std::cout << "Результат (Множество №1 после присваивания): " << t1 << std::endl;
+                    printBitField("t1", t1.operator TBitField());
                 }
                 else {
                     std::cout << "Множество № 1: " << t1 << std::endl;
                     std::cout << "Множество № 2 до: " << t2 << std::endl;
                     t2 = t1;  // Присваиваем t2 значение t1
                     std::cout << "Результат (Множество №2 после присваивания): " << t2 << std::endl;
+                    printBitField("t2", t2.operator TBitField());
                 }
                 break;
                 
@@ -258,14 +266,16 @@ int main() {
             case 6:  // Оператор объединения
                 std::cout << "Применяем операцию объединения между множествами....." << "\n";
                 std::cout << "Результат: " << (t1 + t2) << "\n";  // Используем оператор +
+                printBitField("t2+t2", t1+t2.operator TBitField());
                 break;
                 
             case 7:  // Оператор пересечения
                 std::cout << "Применяем операцию пересечения между множествами....." << "\n";
                 std::cout << "Результат: " << (t1 * t2) << "\n";  // Используем оператор *
+                printBitField("t2+t2", t1*t2.operator TBitField());
                 break;
                 
-            case 8:  // Оператор дополнения
+            case 8: 
                 do {
                     std::cout << "Введите номер множества, к которому Вы хотите применить операцию 'отрицание': " << "\n";
                     std::cin >> count;
@@ -279,10 +289,12 @@ int main() {
                 if (count == 1) {
                     std::cout << "Применяем операцию 'Отрицание' к множеству №1....." << "\n";
                     std::cout << "Результат: " << (~t1) << "\n";  // Используем оператор ~
+                    printBitField("~t1", ~t1.operator TBitField());
                 }
                 else {
                     std::cout << "Применяем операцию 'Отрицание' к множеству №2....." << "\n";
                     std::cout << "Результат: " << (~t2) << "\n";
+                    printBitField("~t2", ~t2.operator TBitField());
                 }
                 break;
                 
@@ -291,7 +303,7 @@ int main() {
                 flagg = 0;  // Завершаем цикл
                 break;
                 
-                
+                5
             default:
                 std::cout << "Ошибка: неверный пункт меню!" << std::endl;
                 break;

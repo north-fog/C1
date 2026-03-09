@@ -228,7 +228,7 @@ std::ostream& operator<<(std::ostream& out, const TBitField& bf) {
         
         // Разделители между группами по 8
         if ((i + 1) % 8 == 0 && i != bf.BitLen - 1) {
-            out << "   ";  
+            out << " | ";  
         } else {
             out << " ";
         }
