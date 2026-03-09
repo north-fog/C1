@@ -3,15 +3,13 @@
 using namespace std;
 
 // Возвращает индекс элемента в массиве для бита n
-// Использует сдвиг вправо на 5 (деление на 32) для скорости
 int TBitField::GetMemIndex(const int n) const {
-    return n >> 5;  // То же самое что n / 32
+    return n >> 5;  
 }
 
 // Возвращает битовую маску для бита n
-// 1 << (n & 31) - сдвигаем 1 влево на остаток от деления n на 32
 TELEM TBitField::GetMemMask(const int n) const {
-    return 1 << (n & 31);  // n & 31 - то же что n % 32, но быстрее
+    return 1 << (n & 31);  
 }
 
 // Конструктор: создает битовое поле длины len
@@ -204,9 +202,9 @@ TBitField TBitField::operator~() {
     
     // Если длина не кратна 32, нужно обнулить лишние биты в последнем элементе
     if (BitLen % 32 != 0) {
-        int bit = BitLen % 32;  // Сколько битов реально используется в последнем элементе
-        TELEM mask = (1 << bit) - 1;  // Маска: например для bit=4 будет 1111 (15)
-        res.pMem[MemLen - 1] &= mask;  // Обнуляем биты с позиции bit до 31
+        int bit = BitLen % 32; 
+        TELEM mask = (1 << bit) - 1; 
+        res.pMem[MemLen - 1] &= mask;  
     }
     
     return res;  // Возвращаем результат
@@ -217,36 +215,48 @@ int TBitField::GetLen() const {
     return BitLen;
 }
 
-    std::ostream& operator<<(std::ostream& out, const TBitField& bf) {
-    // Верхняя строка - сами биты
-    out << "Биты: ";
-    for (int i = 0; i < bf.BitLen; i++) {
-        out << (bf.GetBit(i) ? '1' : '0');
-        
-        if ((i + 1) % 8 == 0 && i != bf.BitLen - 1) {
-            out << " | ";  // разделитель между байтами
-        } else if (i != bf.BitLen - 1) {
-            out << ' ';
-        }
-    }
-    out << std::endl;
-    
-    // Нижняя строка - номера битов
+std::ostream& operator<<(std::ostream& out, const TBitField& bf) {
+    // Вывод номеров битов
     out << "Номер: ";
     for (int i = 0; i < bf.BitLen; i++) {
+        // Для однозначных чисел (0-9) добавляем пробел
         if (i < 10) {
-            out << i << ' ';
+            out << " " << i;
         } else {
-            out << i << ' ';
+            out << i;
         }
         
+        // Разделители между группами по 8
         if ((i + 1) % 8 == 0 && i != bf.BitLen - 1) {
-            out << "  ";  // дополнительный отступ для разделителя
+            out << "   ";  
+        } else {
+            out << " ";
+        }
+    }
+    
+    // Вывод самих битов
+    out << "\nБиты:  ";
+    for (int i = 0; i < bf.BitLen; i++) {
+        // Пробелы ПЕРЕД битом - ровно столько, сколько было в номере
+        if (i < 10) {
+            out << " ";                    // 1 пробел (как у номера 0-9)
+        } else if (i >= 10 && i < 100) {
+            out << " ";                      // без пробела (как у номера 10-99)
+        }
+        
+        out << (bf.GetBit(i) ? '1' : '0');
+        
+        // Разделители между группами
+        if ((i + 1) % 8 == 0 && i != bf.BitLen - 1) {
+            out << " | ";
+        } else if (i != bf.BitLen - 1) {
+            out << " ";
         }
     }
     
     return out;
 }
+
 
 
 istream& operator>>(istream& is, TBitField& bf) {

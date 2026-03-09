@@ -17,7 +17,7 @@ void menu() {
 }
 
 void printBitField(const char* name, const TBitField& bf) {
-    std::cout << name << " (битовое поле): " << bf << std::endl;
+    std::cout << name << " (битовое поле): \n" << bf << std::endl;
 }
 int main() {
     setlocale(LC_ALL, "Rus");  // Устанавливаем русскую локаль для вывода
@@ -79,7 +79,7 @@ int main() {
         if (flagg == 1) {
             menu();  // Выводим меню
             
-            // Ввод номера пункта меню с проверкой (от 1 до 11)
+            // Ввод номера пункта меню с проверкой (от 1 до 9)
             do {
                 std::cout << "Введите номер желаемого пункта из меню: " << "\n";
                 std::cin >> flag;
@@ -87,10 +87,10 @@ int main() {
                 // Очищаем буфер после ввода числа
                 std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
                 
-                if (flag < 1 || flag > 11) {
-                    std::cout << "Ошибка: введите число от 1 до 11!" << std::endl;
+                if (flag < 1 || flag > 9) {
+                    std::cout << "Ошибка: введите число от 1 до 9!" << std::endl;
                 }
-            } while ((flag < 1) || (flag > 11));
+            } while ((flag < 1) || (flag > 9));
             
             // Обработка выбранного пункта
             switch (flag) {
