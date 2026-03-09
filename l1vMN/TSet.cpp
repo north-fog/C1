@@ -1,66 +1,96 @@
 #include "TSet.h"
 #include <iostream>
 using namespace std;
-//расмотреть возможность переделать на  явную иницализацию
-
-TSet::TSet(int mp):
- MaxPower(mp), 
- BitFild(mp) {}
 
 
-TSet::TSet(const TSet& s): 
-MaxPower(s.MaxPower), 
-BitFild(s.BitFild) {}
+TSet::TSet(int mp) : MaxPower(mp), BitFild(mp) {
+    // Проверка на положительную мощность
+    if (mp <= 0) {
+        throw "Ошибка в конструкторе TSet: мощность должна быть положительной!";
+    }
+}
 
+TSet::TSet(const TSet& s) : MaxPower(s.MaxPower), BitFild(s.BitFild) {}
 
-TSet::TSet(const TBitField& bf):
-MaxPower(bf.GetLen()),
-BitFild(bf) {}
+TSet::TSet(const TBitField& bf) : MaxPower(bf.GetLen()), BitFild(bf) {}
+
 
 
 TSet::operator TBitField() {
-    TBitField tmp(this->BitFild);  
-    return tmp;                     
+    TBitField tmp(this->BitFild);
+    return tmp;
 }
 
 
 void TSet::InsElem(const int elem) {
-    if (elem >= 0 && elem < MaxPower) {
-        BitFild.SetBit(elem);  // Устанавливаем бит
+    // Проверка на отрицательный индекс
+    if (elem < 0) {
+        throw "Ошибка в InsElem: индекс элемента не может быть отрицательным!";
     }
+    
+    // Проверка на выход за границы
+    if (elem >= MaxPower) {
+        throw "Ошибка в InsElem: индекс элемента выходит за границы множества!";
+    }
+    
+    // Если все проверки пройдены - устанавливаем бит
+    BitFild.SetBit(elem);
 }
 
-
 void TSet::DelElem(const int elem) {
-    if (elem >= 0 && elem < MaxPower) {
-        BitFild.ClrBit(elem);  // Очищаем соответствующий бит
+    // Проверка на отрицательный индекс
+    if (elem < 0) {
+        throw "Ошибка в DelElem: индекс элемента не может быть отрицательным!";
     }
+    
+    // Проверка на выход за границы
+    if (elem >= MaxPower) {
+        throw "Ошибка в DelElem: индекс элемента выходит за границы множества!";
+    }
+    
+    // Если все проверки пройдены - очищаем бит
+    BitFild.ClrBit(elem);
 }
 
 int TSet::isMember(const int elem) const {
-    if (elem >= 0 && elem < MaxPower) {
-        return BitFild.GetBit(elem);
+    // Проверка на отрицательный индекс
+    if (elem < 0) {
+        throw "Ошибка в isMember: индекс элемента не может быть отрицательным!";
     }
-    return 0;
+    
+    // Проверка на выход за границы
+    if (elem >= MaxPower) {
+        throw "Ошибка в isMember: индекс элемента выходит за границы множества!";
+    }
+    
+    // Если все проверки пройдены - возвращаем значение бита
+    return BitFild.GetBit(elem);
 }
+
+
 
 int TSet::operator==(const TSet& s) {
-   return (BitFild == s.BitFild);
+    return (BitFild == s.BitFild);
 }
 
-// Оператор присваивания
 TSet& TSet::operator=(const TSet& s) {
-    MaxPower = s.MaxPower;  // Копируем мощность
-    BitFild = s.BitFild;    // Копируем битовое поле через оператор = класса TBitField
-    return *this;           // Возвращаем ссылку на текущий объект
+    // Проверка на самоприсваивание
+    if (this == &s) {
+        cout << "Предупреждение в TSet::operator=: попытка самоприсваивания" << endl;
+        return *this;
+    }
+    
+    MaxPower = s.MaxPower;
+    BitFild = s.BitFild;
+    return *this;
 }
 
-// Оператор объединения множеств (A ? B) 
+
+
 TSet TSet::operator+(const TSet& s) {
     TSet res(BitFild | s.BitFild);
     return res;
 }
-
 
 TSet TSet::operator*(const TSet& s) {
     TSet res(BitFild & s.BitFild);
@@ -71,17 +101,17 @@ TSet TSet::operator~() {
     TSet res(~BitFild);
     return res;
 }
+
+
 ostream& operator<<(ostream& os, const TSet& s) {
     os << "{ ";
-    bool first = true;
     
     for (int i = 0; i < s.MaxPower; i++) {
         if (s.isMember(i)) {
-            if (!first) {
+            if (i!=0) {
                 os << ", ";
             }
             os << i;
-            first = false;
         }
     }
     
@@ -97,9 +127,18 @@ istream& operator>>(istream& is, TSet& s) {
     
     int elem;
     while (is >> elem) {
-        if (elem >= 0 && elem < s.MaxPower) {
-            s.InsElem(elem);
+        // Проверка на отрицательный элемент
+        if (elem < 0) {
+            throw "Ошибка при вводе: элемент не может быть отрицательным!";
         }
+        
+        // Проверка на выход за границы
+        if (elem >= s.MaxPower) {
+            throw "Ошибка при вводе: элемент выходит за границы множества!";
+        }
+        
+        s.InsElem(elem);
+        
         if (is.peek() == '\n') {
             is.get();
             break;

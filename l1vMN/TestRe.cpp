@@ -1,5 +1,6 @@
 #include <iostream>
 #include "TSet.h"
+#include <iomanip>  
 
 using namespace std;
 
@@ -42,20 +43,15 @@ int main() {
     count = 0;
     int perLine = 0;
     
-    for (m = 2; m <= n; m++) {
-        if (s.isMember(m)) {
-            cout <<" "<< m;
-            count++;
-            perLine++;
-            if (perLine % 10 == 0) {
-                cout << endl;
-            }
-        }
-    }
-    
-    if (perLine % 10 != 0) {
-        cout << endl;
-    }
+  for (m = 2; m <= n; m++) 
+    if (s.isMember(m)) 
+    { 
+      count++; 
+      cout << setw(3) << m << " "; 
+      if (k++ % 10 == 0) 
+        cout << endl; 
+    } 
+  cout << endl; 
     
     cout << "В первых " << n << " числах " << count << " простых" << endl;
     

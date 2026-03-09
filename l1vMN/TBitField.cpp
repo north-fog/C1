@@ -1,13 +1,12 @@
 #include "TBitField.h"
-#include <iostream>  // для cout в предупреждениях
+#include <iomanip>
+#include <iostream>  
 using namespace std;
 
-// Возвращает индекс элемента в массиве для бита n
+
 int TBitField::GetMemIndex(const int n) const {
     return n >> 5;  
 }
-
-// Возвращает битовую маску для бита n
 TELEM TBitField::GetMemMask(const int n) const {
     return 1 << (n & 31);  
 }
@@ -137,7 +136,7 @@ TBitField& TBitField::operator=(const TBitField& bf) {
 int TBitField::operator==(const TBitField& bf) {
     // Если разная длина - сразу не равны
     if (BitLen != bf.BitLen) { 
-    return 0; 
+        return 0; 
     }
     
     // Сравниваем каждый элемент массива
@@ -219,16 +218,10 @@ std::ostream& operator<<(std::ostream& out, const TBitField& bf) {
     // Вывод номеров битов
     out << "Номер: ";
     for (int i = 0; i < bf.BitLen; i++) {
-        // Для однозначных чисел (0-9) добавляем пробел
-        if (i < 10) {
-            out << " " << i;
-        } else {
-            out << i;
-        }
+        out << std::setw(2) << i;
         
-        // Разделители между группами по 8
         if ((i + 1) % 8 == 0 && i != bf.BitLen - 1) {
-            out << " | ";  
+            out << "  |  "; 
         } else {
             out << " ";
         }
@@ -237,18 +230,10 @@ std::ostream& operator<<(std::ostream& out, const TBitField& bf) {
     // Вывод самих битов
     out << "\nБиты:  ";
     for (int i = 0; i < bf.BitLen; i++) {
-        // Пробелы ПЕРЕД битом - ровно столько, сколько было в номере
-        if (i < 10) {
-            out << " ";                    // 1 пробел (как у номера 0-9)
-        } else if (i >= 10 && i < 100) {
-            out << " ";                      // без пробела (как у номера 10-99)
-        }
+        out << std::setw(2) << (bf.GetBit(i) ? '1' : '0');
         
-        out << (bf.GetBit(i) ? '1' : '0');
-        
-        // Разделители между группами
         if ((i + 1) % 8 == 0 && i != bf.BitLen - 1) {
-            out << " | ";
+            out << "  |  ";
         } else if (i != bf.BitLen - 1) {
             out << " ";
         }
