@@ -105,13 +105,15 @@ TSet TSet::operator~() {
 
 ostream& operator<<(ostream& os, const TSet& s) {
     os << "{ ";
+    bool first = true;
     
     for (int i = 0; i < s.MaxPower; i++) {
         if (s.isMember(i)) {
-            if (i!=0) {
+            if (!first) {
                 os << ", ";
             }
             os << i;
+            first = false;
         }
     }
     

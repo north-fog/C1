@@ -79,10 +79,10 @@ int main() {
                 std::cin >> flag;
                 std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
                 
-                if (flag < 1 || flag > 9) {
-                    std::cout << "Ошибка: введите число от 1 до 9!" << std::endl;
+                if (flag < 1 || flag > 11) {
+                    std::cout << "Ошибка: введите число от 1 до 11!" << std::endl;
                 }
-            } while ((flag < 1) || (flag > 9));
+            } while ((flag < 1) || (flag > 11));
             
             switch (flag) {
             case 1:
