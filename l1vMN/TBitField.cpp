@@ -19,7 +19,6 @@ TBitField::TBitField(const int len) : BitLen(len) {
     }
     
     // Вычисляем, сколько элементов TELEM нужно для хранения len бит
-    // (len + 31) >> 5 - это округление вверх при делении на 32
     MemLen = (len + 31) >> 5;
     
     // Выделяем динамическую память под массив и инициализируем всё 0
@@ -65,8 +64,7 @@ void TBitField::SetBit(const int n) {
     if (n >= BitLen) {
         throw "Ошибка в SetBit: индекс бита выходит за границы поля!";
     }
-    
-    // OR с маской устанавливает нужный бит в 1
+
     pMem[GetMemIndex(n)] |= GetMemMask(n);
 }
 

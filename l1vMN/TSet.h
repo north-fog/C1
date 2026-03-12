@@ -48,10 +48,12 @@ public:
     
     // Дополнение множества (¬A) - все элементы, кроме тех, что в A
     TSet operator~();
+
+    TSet operator+ (const int elem);   // включение элемента в множество 
+    TSet operator- (const int elem);   // удаление элемента из множества 
     
     // Дружественные функции для ввода/вывода
     friend std::ostream& operator<<(std::ostream& os, const TSet& s);
     friend std::istream& operator>>(std::istream& is, TSet& s);    
 
-    
 };

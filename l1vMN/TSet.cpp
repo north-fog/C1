@@ -147,3 +147,32 @@ istream& operator>>(istream& is, TSet& s) {
     
     return is;
 }
+TSet TSet::operator+ (const int elem) {
+        // Проверяем границы
+    if (elem < 0) {
+        throw "Ошибка в operator+: индекс элемента не может быть отрицательным!";
+    }
+    if (elem >= MaxPower) {
+        throw "Ошибка в operator+: индекс элемента выходит за границы множества!";
+    }
+    
+    // Добавляем элемент
+    BitFild.SetBit(elem);
+    
+    return *this;
+}
+
+TSet TSet::operator- (const int elem) {
+
+    if (elem < 0) {
+        throw "Ошибка в operator+: индекс элемента не может быть отрицательным!";
+    }
+    if (elem >= MaxPower) {
+        throw "Ошибка в operator+: индекс элемента выходит за границы множества!";
+    }
+    
+    // Добавляем элемент
+    BitFild.ClrBit(elem);
+    
+    return *this;
+}
