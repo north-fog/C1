@@ -129,18 +129,9 @@ istream& operator>>(istream& is, TSet& s) {
     
     int elem;
     while (is >> elem) {
-        // Проверка на отрицательный элемент
-        if (elem < 0) {
-            throw "Ошибка при вводе: элемент не может быть отрицательным!";
+        if (elem >= 0 && elem < s.MaxPower) {
+            s.InsElem(elem);
         }
-        
-        // Проверка на выход за границы
-        if (elem >= s.MaxPower) {
-            throw "Ошибка при вводе: элемент выходит за границы множества!";
-        }
-        
-        s.InsElem(elem);
-        
         if (is.peek() == '\n') {
             is.get();
             break;
