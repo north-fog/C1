@@ -5,7 +5,7 @@
 // Тип позиции для доступа к звеньям
 enum TLinkPos { FIRST_POS, CURRENT_POS, LAST_POS };
 
-// Класс линейных списков
+// Класс линейного списка
 class TDatList {
 protected:
     PTDatLink pFirst;     // первое звено
@@ -17,25 +17,24 @@ protected:
     int ListLen;          // количество звеньев в списке
 
 protected:
-    // Вспомогательные методы
     PTDatLink GetLink(PTDatValue pVal = nullptr, PTDatLink pLink = nullptr);
-    void DelLink(PTDatLink pLink);  // удаление звена
+    void DelLink(PTDatLink pLink);   // удаление звена
 
 public:
     TDatList();
     virtual ~TDatList() { DelList(); }
     
     // Доступ
-    PTDatValue GetDatValue(TLinkPos mode = CURRENT_POS) const;  // значение
-    virtual bool IsEmpty() const { return pFirst == pStop; }    // список пуст?
-    int GetListLength() const { return ListLen; }                // количество звеньев
+    PTDatValue GetDatValue(TLinkPos mode = CURRENT_POS) const;
+    virtual bool IsEmpty() const { return pFirst == pStop; }
+    int GetListLength() const { return ListLen; }
     
     // Навигация
-    int SetCurrentPos(int pos);          // установить текущее звено
-    int GetCurrentPos() const { return CurrPos; }  // получить номер текущего звена
-    virtual int Reset();                 // установить на начало списка
-    virtual bool IsListEnded() const;    // список завершен?
-    int GoNext();                        // сдвиг вправо текущего звена
+    int SetCurrentPos(int pos);
+    int GetCurrentPos() const { return CurrPos; }
+    virtual int Reset();
+    virtual bool IsListEnded() const;
+    int GoNext();  // сдвиг вправо текущего звена (1 — конец списка)
     
     // Вставка звеньев
     virtual void InsFirst(PTDatValue pVal = nullptr);   // перед первым
