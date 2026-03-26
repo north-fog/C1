@@ -232,6 +232,7 @@ int main() {
                     
                     std::cout << "Множество № 2 после: " << t2 << std::endl;
                     std::cout << "t2 (битовое поле):\n" << t2.operator TBitField() << std::endl;
+                    std::cout << t2.GetMaxpower() << "\n"<<std::endl;  
                 }
                 break;
                 

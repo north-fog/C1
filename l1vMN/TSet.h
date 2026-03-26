@@ -31,6 +31,8 @@ public:
     // Проверяет, принадлежит ли элемент множеству
     // Возвращает 1 - да, 0 - нет
     int isMember(const int elem) const;
+
+    int GetMaxpower();
     
     // Перегруженные операторы
     

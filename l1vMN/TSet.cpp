@@ -3,7 +3,7 @@
 using namespace std;
 
 
-TSet::TSet(int mp) : MaxPower(mp), BitFild(mp) {
+TSet::TSet(int mp) : MaxPower(mp-1), BitFild(mp) {
     // Проверка на положительную мощность
     if (mp <= 0) {
         throw "Ошибка в конструкторе TSet: мощность должна быть положительной!";
@@ -12,7 +12,7 @@ TSet::TSet(int mp) : MaxPower(mp), BitFild(mp) {
 
 TSet::TSet(const TSet& s) : MaxPower(s.MaxPower), BitFild(s.BitFild) {}
 
-TSet::TSet(const TBitField& bf) : MaxPower(bf.GetLen()), BitFild(bf) {}
+TSet::TSet(const TBitField& bf) : MaxPower(bf.GetLen()-1), BitFild(bf) {}
 
 
 
@@ -168,4 +168,7 @@ TSet TSet::operator- (const int elem) {
     BitFild.ClrBit(elem);
     
     return *this;
+}
+int TSet::GetMaxpower(){
+    return(MaxPower);
 }
