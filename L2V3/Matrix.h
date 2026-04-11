@@ -15,24 +15,23 @@ public:
     TMatrix(const TVector<TVector<ValType> >& mt);
     
     // Сравнение матриц
-    int operator==(const TMatrix& mt) const;
+    int operator==(const TMatrix& mt) ;
     
     // Присваивание
     TMatrix& operator=(const TMatrix& mt);
     
     // Сложение матриц
-    TMatrix operator+(const TMatrix& mt) const;
+    TMatrix operator+(const TMatrix& mt);
     
     // Вычитание матриц
-    TMatrix operator-(const TMatrix& mt) const;
+    TMatrix operator-(const TMatrix& mt);
     
     // Умножение матриц
-    TMatrix operator*(const TMatrix& mt) const;
+    TMatrix operator*(const TMatrix& mt);
     
     // Умножение матрицы на вектор
-    TVector<ValType> operator*(const TVector<ValType>& v) const;
+    TVector<ValType> operator*(const TVector<ValType>& v) ;
     
-    // Доступ к элементу матрицы по индексам 
     ValType& operator()(int i, int j);
     ValType operator()(int i, int j) const;
     

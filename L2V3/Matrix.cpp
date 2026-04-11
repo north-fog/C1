@@ -23,7 +23,7 @@ TMatrix<ValType>::TMatrix(const TVector<TVector<ValType>>& mt)
 
 // Оператор сравнения матриц
 template <class ValType>
-int TMatrix<ValType>::operator==(const TMatrix& mt) const {
+int TMatrix<ValType>::operator==(const TMatrix& mt)  {
     return TVector<TVector<ValType> >::operator==(mt);
 }
 
@@ -38,7 +38,7 @@ TMatrix<ValType>& TMatrix<ValType>::operator=(const TMatrix& mt) {
 
 
 template <class ValType>
-TMatrix<ValType> TMatrix<ValType>::operator+(const TMatrix& mt) const {
+TMatrix<ValType> TMatrix<ValType>::operator+(const TMatrix& mt)  {
     if (this->GetSize() != mt.GetSize()) {
         throw "Ошибка: матрицы разного размера!";
     }
@@ -50,7 +50,7 @@ TMatrix<ValType> TMatrix<ValType>::operator+(const TMatrix& mt) const {
 
 // Вычитание матриц
 template <class ValType>
-TMatrix<ValType> TMatrix<ValType>::operator-(const TMatrix& mt) const {
+TMatrix<ValType> TMatrix<ValType>::operator-(const TMatrix& mt)  {
     if (this->GetSize() != mt.GetSize()) {
         throw "Ошибка: матрицы разного размера!";
     }
@@ -62,7 +62,7 @@ TMatrix<ValType> TMatrix<ValType>::operator-(const TMatrix& mt) const {
 
 // Умножение матриц:
 template <class ValType>
-TMatrix<ValType> TMatrix<ValType>::operator*(const TMatrix& mt) const {
+TMatrix<ValType> TMatrix<ValType>::operator*(const TMatrix& mt)  {
     int n = this->GetSize();
     
     if (n != mt.GetSize()) {
@@ -85,7 +85,7 @@ TMatrix<ValType> TMatrix<ValType>::operator*(const TMatrix& mt) const {
 
 // Умножение матрицы на вектор
 template <class ValType>
-TVector<ValType> TMatrix<ValType>::operator*(const TVector<ValType>& v) const {
+TVector<ValType> TMatrix<ValType>::operator*(const TVector<ValType>& v)  {
     int n = this->GetSize();
     
     if (n != v.GetSize()) {
@@ -118,7 +118,7 @@ ValType& TMatrix<ValType>::operator()(int i, int j) {
     return this->pVector[i][j - i];
 }
 template <class ValType>
-ValType TMatrix<ValType>::operator()(int i, int j) const {
+ValType TMatrix<ValType>::operator()(int i, int j)const {
     if (i < 0 || i >= this->GetSize() || j < 0 || j >= this->GetSize()) {
         throw "Ошибка: индексы вне диапазона!";
     }

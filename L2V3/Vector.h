@@ -20,6 +20,7 @@ public:
     int GetStartIndex() const { return StartIndex; }
     ValType& GetValue(int pos);
     ValType& operator[](int pos);
+    const ValType& operator[](int pos) const;
     
     // Сравнение
     int operator==(const TVector& v) const;

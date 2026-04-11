@@ -155,6 +155,18 @@ ValType TVector<ValType>::Length() const {
     return sqrt(sum);
 }
 
+
+
+template <class ValType>
+const ValType& TVector<ValType>::operator[](int pos) const {
+    if (pos < 0 || pos >= Size) {
+        throw "ќшибка: индекс вне диапазона!";
+    }
+    return pVector[pos];
+}
+
 // явное создание экземпл€ров шаблона дл€ int и double
 template class TVector<int>;
 template class TVector<double>;
+// template class TVector<TVector<int>>;
+// template class TVector<TVector<double>>;
