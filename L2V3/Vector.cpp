@@ -51,7 +51,7 @@ int TVector<ValType>::operator==(const TVector& v) const {
     return 1;  // все элементы совпадают
 }
 
-// Оператор присваивания: копирует содержимое другого вектора
+// Оператор присваивания: 
 template <class ValType>
 TVector<ValType>& TVector<ValType>::operator=(const TVector& v) {
     if (this == &v) return *this;  // защита от самоприсваивания
@@ -145,7 +145,7 @@ ValType TVector<ValType>::operator*(const TVector& v) const {
     return result;
 }
 
-// Длина вектора: sqrt(?(a[i]?))
+// Длина вектора:
 template <class ValType>
 ValType TVector<ValType>::Length() const {
     ValType sum = 0;

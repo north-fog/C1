@@ -32,7 +32,7 @@ public:
     // Умножение матрицы на вектор
     TVector<ValType> operator*(const TVector<ValType>& v) const;
     
-    // Доступ к элементу матрицы по индексам [i][j]
+    // Доступ к элементу матрицы по индексам 
     ValType& operator()(int i, int j);
     ValType operator()(int i, int j) const;
     

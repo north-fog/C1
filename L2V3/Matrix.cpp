@@ -15,9 +15,9 @@ template <class ValType>
 TMatrix<ValType>::TMatrix(const TMatrix& mt)
     : TVector<TVector<ValType> >(mt) {}
 
-// Конструктор преобразования из вектора векторов
+// Конструктор преобразования 
 template <class ValType>
-TMatrix<ValType>::TMatrix(const TVector<TVector<ValType> >& mt)
+TMatrix<ValType>::TMatrix(const TVector<TVector<ValType>>& mt)
     : TVector<TVector<ValType> >(mt) {
 }
 
@@ -43,7 +43,7 @@ TMatrix<ValType> TMatrix<ValType>::operator+(const TMatrix& mt) const {
         throw "Ошибка: матрицы разного размера!";
     }
     
-    TVector<TVector<ValType> > result = TVector<TVector<ValType> >::operator+(mt);
+    TVector<TVector<ValType>> result = TVector<TVector<ValType>>::operator+(mt);
     
     return TMatrix(result);
 }
@@ -117,7 +117,18 @@ ValType& TMatrix<ValType>::operator()(int i, int j) {
     }
     return this->pVector[i][j - i];
 }
-
+template <class ValType>
+ValType TMatrix<ValType>::operator()(int i, int j) const {
+    if (i < 0 || i >= this->GetSize() || j < 0 || j >= this->GetSize()) {
+        throw "Ошибка: индексы вне диапазона!";
+    }
+    
+    if (j < i) {
+        return 0;  // элементы ниже диагонали равны 0
+    }
+    
+    return this->pVector[i][j - i];
+}
 
 template class TMatrix<int>;
 template class TMatrix<double>;
