@@ -16,4 +16,5 @@ public:
     
     // Удаление звеньев (удалить первое звено)
     virtual void DelFirst();
+    virtual void InsLast(PTDatValue pVal = nullptr) override;
 };

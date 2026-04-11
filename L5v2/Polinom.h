@@ -4,10 +4,11 @@
 #include "Monom.h"
 
 typedef TMonom* PTMonom;
-
+void DecodeIndex(int index, int& a, int& b, int& c);
 // Класс полинома (список мономов)
 class TPolinom : public THeadRing {
 public:
+
     // Конструктор из массива «коэффициент-индекс»
     TPolinom(int monoms[][2] = nullptr, int km = 0);
     

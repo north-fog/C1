@@ -21,5 +21,7 @@ public:
         return static_cast<PTDatLink>(pNext);
     }
     
+
+    
     friend class TDatList;
 };

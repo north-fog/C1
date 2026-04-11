@@ -15,15 +15,15 @@ void TDatList::DelLink(PTDatLink pLink) {
     }
 }
 
-PTDatValue TDatList::GetDatValue(TLinkPos mode) const {
-    PTDatLink pLink = nullptr;
-    switch (mode) {
-        case FIRST_POS: pLink = pFirst; break;
-        case CURRENT_POS: pLink = pCurrLink; break;
-        case LAST_POS: pLink = pLast; break;
-    }
-    return (pLink != nullptr) ? pLink->GetDatValue() : nullptr;
-}
+// PTDatValue TDatList::GetDatValue(TLinkPos mode) const {
+//     PTDatLink pLink = nullptr;
+//     switch (mode) {
+//         case FIRST_POS: pLink = pFirst; break;
+//         case CURRENT_POS: pLink = pCurrLink; break;
+//         case LAST_POS: pLink = pLast; break;
+//     }
+//     return (pLink != nullptr) ? pLink->GetDatValue() : nullptr;
+// }
 
 int TDatList::SetCurrentPos(int pos) {
     if (pos < 0 || pos >= ListLen) return 0;
@@ -133,4 +133,19 @@ void TDatList::DelCurrent() {
 
 void TDatList::DelList() {
     while (!IsEmpty()) DelFirst();
+}
+PTDatValue TDatList::GetDatValue(TLinkPos mode) const {
+    PTDatLink pLink = nullptr;
+    switch (mode) {
+        case FIRST_POS:
+            pLink = pFirst;
+            break;
+        case CURRENT_POS:
+            pLink = pCurrLink;
+            break;
+        case LAST_POS:
+            pLink = pLast;
+            break;
+    }
+    return (pLink != nullptr) ? pLink->GetDatValue() : nullptr;
 }
