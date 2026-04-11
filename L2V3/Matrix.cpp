@@ -2,24 +2,7 @@
 #include <cmath>
 
 
-template <class ValType>
-TMatrix<ValType>::TMatrix(int s) 
-    : TVector<TVector<ValType> >(s) {
-    for (int i = 0; i < s; i++) {
-        this->pVector[i] = TVector<ValType>(s - i, i);
-    }
-}
 
-// Конструктор копирования
-template <class ValType>
-TMatrix<ValType>::TMatrix(const TMatrix& mt)
-    : TVector<TVector<ValType> >(mt) {}
-
-// Конструктор преобразования 
-template <class ValType>
-TMatrix<ValType>::TMatrix(const TVector<TVector<ValType>>& mt)
-    : TVector<TVector<ValType> >(mt) {
-}
 
 // Оператор сравнения матриц
 template <class ValType>

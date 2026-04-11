@@ -11,9 +11,22 @@ protected:
 
 public:
     // Конструкторы
-    TVector(int s = 10, int si = 0);
-    TVector(const TVector& v);
-    ~TVector();
+     TVector(int s = 10, int si = 0) : Size(s), StartIndex(si) {
+        pVector = new ValType[Size]();
+    }
+    
+    TVector(const TVector& v) {
+        Size = v.Size;
+        StartIndex = v.StartIndex;
+        pVector = new ValType[Size]();
+        for (int i = 0; i < Size; i++) {
+            pVector[i] = v.pVector[i];
+        }
+    }
+    
+    ~TVector() {
+        delete[] pVector;
+    }
     
     // Методы доступа
     int GetSize() const { return Size; }
@@ -57,5 +70,8 @@ public:
         }
         out << " )";
         return out;
+        
     }
+    
+
 };

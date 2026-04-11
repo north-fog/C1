@@ -1,29 +1,6 @@
 #include "Vector.h"
 
-// Конструктор
-template <class ValType>
-TVector<ValType>::TVector(int s, int si) : Size(s), StartIndex(si) {
-    pVector = new ValType[Size]();
-}
 
-// Конструктор копирования
-template <class ValType>
-TVector<ValType>::TVector(const TVector& v) {
-    Size = v.Size;
-    StartIndex = v.StartIndex;
-    pVector = new ValType[Size]();
-    
-    // Копируем все элементы
-    for (int i = 0; i < Size; i++) {
-        pVector[i] = v.pVector[i];
-    }
-}
-
-// Деструктор: освобождает выделенную память
-template <class ValType>
-TVector<ValType>::~TVector() {
-    delete[] pVector;
-}
 
 // Получить значение элемента с проверкой границ
 template <class ValType>
@@ -169,4 +146,3 @@ const ValType& TVector<ValType>::operator[](int pos) const {
 template class TVector<int>;
 template class TVector<double>;
 // template class TVector<TVector<int>>;
-// template class TVector<TVector<double>>;

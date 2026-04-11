@@ -6,13 +6,17 @@ template <class ValType>
 class TMatrix : public TVector<TVector<ValType> > {
 public:
 
-    TMatrix(int s = 10);
+    TMatrix(int s = 10) : TVector<TVector<ValType>>(s) {
+        for (int i = 0; i < s; i++) {
+            this->pVector[i] = TVector<ValType>(s - i, i);
+        }
+    }
     
     // Конструктор копирования
-    TMatrix(const TMatrix& mt);
- 
-    // Конструктор преобразования из вектора векторов
-    TMatrix(const TVector<TVector<ValType> >& mt);
+    TMatrix(const TMatrix& mt) : TVector<TVector<ValType>>(mt) {}
+    
+    // Конструктор преобразования
+    TMatrix(const TVector<TVector<ValType>>& mt) : TVector<TVector<ValType>>(mt) {}
     
     // Сравнение матриц
     int operator==(const TMatrix& mt) ;
