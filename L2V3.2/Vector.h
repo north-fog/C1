@@ -56,26 +56,24 @@ public:
         }
         return 1;
     }
-
+    
+    int operator!=(const TVector& v) const{
+        return !(*this == v);
+    }
     
     TVector& operator=(const TVector& v) {
-    if (this == &v) return *this;  // защита от самоприсваивания
-    
-    // Если размеры разные, перевыделяем память
-    if (Size != v.Size) {
-        delete[] pVector;
-        Size = v.Size;
-        pVector = new ValType[Size]();
-    }
-    
-    StartIndex = v.StartIndex;
-    
-    // Копируем элементы
-    for (int i = 0; i < Size; i++) {
-        pVector[i] = v.pVector[i];
-    }
-    
-    return *this;
+        if (this != &v) {
+            if (Size != v.Size) {
+                delete[] pVector;
+                Size = v.Size;
+                pVector = new ValType[Size]();
+            }
+            StartIndex = v.StartIndex;
+            for (int i = 0; i < Size; i++) {
+                pVector[i] = v.pVector[i];
+            }
+        }
+        return *this;
     }
     
     TVector operator+(const ValType& val) const {
