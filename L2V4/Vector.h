@@ -49,19 +49,19 @@ public:
         return pVector[pos];
     }
     
-    int operator==(const TVector& v) const {
-        if (Size != v.Size) return 0;
+    int operator==(const TVector& v) const {       
+        if (Size != v.Size) return 0;               //переписать на =
         for (int i = 0; i < Size; i++) {
             if (pVector[i] != v.pVector[i]) return 0;
         }
         return 1;
     }
     
-    int operator!=(const TVector& v) const{
+    int operator!=(const TVector& v) const{         // удалть  и переспиать все последующии 
         return !(*this == v);
-    }
+    }       
     
-    TVector& operator=(const TVector& v) {
+    TVector& operator=(const TVector& v) {          // сделать перемещением &&
         if (this != &v) {
             if (Size != v.Size) {
                 delete[] pVector;

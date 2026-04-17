@@ -40,6 +40,7 @@ std::istream& operator>>(std::istream& in, TFormula& form)
     }
     return in;
 }
+ 
 
 // Проверка на число
 bool isdigit(char c)

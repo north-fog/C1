@@ -10,6 +10,10 @@ public:
             this->pVector[i] = TVector<ValType>(s - i, i);
         }
     }
+
+
+    //std::
+
     
     // Конструктор копирования
     TMatrix(const TMatrix& mt) : TVector<TVector<ValType>>(mt) {}
@@ -52,7 +56,7 @@ public:
         TMatrix result(n);
         for (int i = 0; i < n; i++) {
             for (int j = i; j < n; j++) {
-                ValType sum = 0;
+                ValType sum = 0;                    //valtype sume= valtype{}
                 for (int k = i; k <= j; k++) {
                     sum += (*this)(i, k) * mt(k, j);
                 }
@@ -97,7 +101,7 @@ public:
     }
     
     // Получить размер
-    int GetSize() const { return TVector<TVector<ValType>>::GetSize(); }
+   // int GetSize() const { return TVector<TVector<ValType>>::GetSize(); }
     
     // Ввод матрицы (только верхний треугольник)
     friend istream& operator>>(istream& in, TMatrix& mt) {
