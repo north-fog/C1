@@ -1,29 +1,28 @@
 #include "TStack.h" 
 #include "TFormula.h" 
 #include <cstring>
-#include <cmath>
-#include <iostream>
 
 
-namespace {
-    bool isDigit(char c) {
-        return c >= '0' && c <= '9';
-    }
-    
-    bool isOperator(char c) {
-        return c == '+' || c == '-' || c == '*' || c == '/';
-    }
-    
-    bool isBracket(char c) {
-        return c == '(' || c == ')';
-    }
-    
-    int priority(char op) {
-        if (op == '+' || op == '-') return 1;
-        if (op == '*' || op == '/') return 2;
-        return 0;
-    }
+
+
+bool isDigit(char c) {
+    return c >= '0' && c <= '9';
 }
+
+bool isOperator(char c) {
+    return c == '+' || c == '-' || c == '*' || c == '/';
+}
+
+bool isBracket(char c) {
+    return c == '(' || c == ')';
+}
+
+int priority(char op) {
+    if (op == '+' || op == '-') return 1;
+    if (op == '*' || op == '/') return 2;
+    return 0;
+}
+
 
 
 TFormula::TFormula(char form[]){
@@ -46,11 +45,11 @@ int TFormula::FormulaChecker(int Brackets[],int size){
         }
         else if (Formula[i]==')'){
             if(stack.IsEmpty()){Brackets[errorcount]=i; errorcount++;}}
-        else{
-            stack.Get();
-        }
-
-
+            else{stack.Get();}
+    }
+    while (!stack.IsEmpty()) {
+        Brackets[errorcount] = stack.Get();
+        errorcount++;
     }
     return errorcount;   
 
@@ -58,27 +57,25 @@ int TFormula::FormulaChecker(int Brackets[],int size){
 
 int TFormula::FormulaConverter(void){
     int len = strlen(Formula);
-    int errorcount = 0;
     TStack stack(MaxLength);
     int postfixindex = 0;
-    bool lastisoperant = false; 
        for (int i = 0; i < len; i++) {
         char c = Formula[i];
 
         if (c == ' ') continue;
         
-        if (isDigit(c) || c == '.') {
-            while (i < len && (isDigit(Formula[i]) || Formula[i] == '.')) {
+        if (isDigit(c) ) {
+            while (i < len && (isDigit(Formula[i]))) {
                 PostfixForm[postfixindex++] = Formula[i++];
             }
             PostfixForm[postfixindex++] = ' ';
             i--;
-            lastisoperant = true;
+
         }
         //открывающая скобка
         else if (c == '(') {
             stack.Put(c);
-           lastisoperant = false;
+
         }
         //закрывающая скобка
         else if (c == ')') {
@@ -89,7 +86,6 @@ int TFormula::FormulaConverter(void){
             if (!stack.IsEmpty()) {
                 stack.Get();  
             }
-            lastisoperant = true;
         } 
         //операторы
         else if (isOperator(c)) {
@@ -99,7 +95,7 @@ int TFormula::FormulaConverter(void){
                 PostfixForm[postfixindex++] = ' ';
             }
             stack.Put(c);
-            lastisoperant = false;
+
         }
     }
     
@@ -126,27 +122,17 @@ double TFormula::FormulaCalculator() {
         
         if (c == ' ') continue;
         
-        if (isDigit(c) || c == '.') {
-            double num = 0.0;
-            double fraction = 0.1;
-            bool hasDot = false;
-            
-            while (i < len && (isDigit(PostfixForm[i]) || PostfixForm[i] == '.')) {
-                if (PostfixForm[i] == '.') {
-                    hasDot = true;
-                }
-                else if (!hasDot) {
-                    num = num * 10 + (PostfixForm[i] - '0');
-                }
-                else {
-                    num = num + (PostfixForm[i] - '0') * fraction;
-                    fraction *= 0.1;
-                }
+        if (isDigit(c)) {
+            int num = 0;
+    
+    
+            while (i < len && isDigit(PostfixForm[i])) {
+                num = num * 10 + (PostfixForm[i] - '0');
                 i++;
-            }
-            i--;
+    }
+            i--;  
             stack.Put(num);
-        }
+}
         else if (isOperator(c)) {
             double b = stack.Get();
             double a = stack.Get();
@@ -163,6 +149,6 @@ double TFormula::FormulaCalculator() {
     }
     
     return stack.Get();
-}       
+}
     
 

@@ -30,8 +30,8 @@ TELEM TStack :: Get ( void ) {            // извлечь значение
 } 
 TELEM TStack::Peek(void)const{
   if (IsEmpty()) {
-    return TELEM();  
+    return 0;  
   }
-    return pMem[Hi];
+  return pMem[Hi];
 
 }
