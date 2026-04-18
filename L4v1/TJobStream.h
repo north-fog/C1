@@ -1,7 +1,4 @@
 #pragma once
-
-
-
 class TJobStream { 
     private: 
         double JobIntеns;    // интенсивность потока задач 
