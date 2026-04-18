@@ -44,8 +44,13 @@ int TFormula::FormulaChecker(int Brackets[],int size){
             stack.Put(i);
         }
         else if (Formula[i]==')'){
-            if(stack.IsEmpty()){Brackets[errorcount]=i; errorcount++;}}
-            else{stack.Get();}
+    if(stack.IsEmpty()){
+        Brackets[errorcount]=i; 
+        errorcount++;
+    } else {
+        stack.Get();  
+    }
+}
     }
     while (!stack.IsEmpty()) {
         Brackets[errorcount] = stack.Get();

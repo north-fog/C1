@@ -1,204 +1,165 @@
 #include <iostream>
 #include <iomanip>
+#include <cmath>
 #include "TFormula.h"
 #include "TStack.h"
 
-// Функция для красивого вывода разделителя
+using namespace std;
+
 void printSeparator() {
-    std::cout << "\n" << std::string(60, '=') << "\n";
-}
-
-// Функция для тестирования одной формулы
-void testFormula(const char* formula, int testNumber) {
-    std::cout << "\nТЕСТ #" << testNumber << "\n";
-    std::cout << "Формула: \"" << formula << "\"\n";
-    printSeparator();
-    
-    try {
-        // Создаём объект формулы
-        TFormula f(const_cast<char*>(formula));  // const_cast нужен из-за отсутствия const в конструкторе
-        
-        // Массив для позиций ошибочных скобок
-        int brackets[MaxLength];
-        int errorCount = 0;
-        
-        // Проверяем скобки
-        int bracketErrors = f.FormulaChecker(brackets, errorCount);
-        
-        std::cout << "Проверка скобок: ";
-        if (bracketErrors == 0) {
-            std::cout << "Ошибок не обнаружено\n";
-        } else {
-            std::cout << "Найдено ошибок: " << bracketErrors << "\n";
-            std::cout << "Позиции ошибок: ";
-            for (int i = 0; i < errorCount; i++) {
-                std::cout << brackets[i] << " ";
-            }
-            std::cout << "\n";
-        }
-        
-        // Если есть ошибки в скобках - пропускаем дальнейшие вычисления
-        if (bracketErrors != 0) {
-            std::cout << "\n? Перевод в постфиксную форму и вычисление невозможны (ошибки в скобках)\n";
-            return;
-        }
-        
-        // Преобразуем в постфиксную форму
-        int convertResult = f.FormulaConverter();
-        
-        if (convertResult == 0) {
-            std::cout << "? Постфиксная форма получена успешно\n";
-            // Здесь нужно добавить метод для получения PostfixForm, 
-            // но так как поле приватное - используем прямой доступ через дружественную функцию
-            // или временно выведем результат через FormulaCalculator
-            
-            // Вычисляем результат
-            double result = f.FormulaCalculator();
-            std::cout << "?? Результат вычисления: " << result << "\n";
-        } else {
-            std::cout << "? Ошибка при преобразовании в постфиксную форму\n";
-        }
-        
-    } catch (const char* msg) {
-        std::cout << "? Исключение: " << msg << "\n";
-    } catch (...) {
-        std::cout << "? Неизвестное исключение\n";
-    }
-}
-
-// Альтернативная версия с ручной проверкой (без использования FormulaChecker)
-void testFormulaManual(const char* formula, int testNumber, 
-                       const char* expectedPostfix, double expectedResult, 
-                       int expectedErrors) {
-    std::cout << "\n???????????????????????????????????????????????????????????\n";
-    std::cout << "ТЕСТ #" << testNumber << "\n";
-    std::cout << "???????????????????????????????????????????????????????????\n";
-    std::cout << "Входная формула: \"" << formula << "\"\n";
-    std::cout << "Ожидаемый результат: " << expectedResult << "\n";
-    std::cout << "Ожидаемая постфиксная форма: \"" << expectedPostfix << "\"\n";
-    std::cout << "Ожидаемое количество ошибок: " << expectedErrors << "\n";
-    std::cout << "???????????????????????????????????????????????????????????\n";
-    
-    TFormula f(const_cast<char*>(formula));
-    
-    int brackets[MaxLength];
-    int errorCount = 0;
-    int errors = f.FormulaChecker(brackets, errorCount);
-    
-    std::cout << "Фактическое количество ошибок: " << errors << "\n";
-    
-    if (errors == 0 && expectedErrors == 0) {
-        f.FormulaConverter();
-        double result = f.FormulaCalculator();
-        std::cout << "Фактический результат: " << result << "\n";
-        
-        if (std::abs(result - expectedResult) < 0.0001) {
-            std::cout << "? ТЕСТ ПРОЙДЕН УСПЕШНО!\n";
-        } else {
-            std::cout << "? ТЕСТ НЕ ПРОЙДЕН (неверный результат)\n";
-        }
-    } else if (errors > 0 && expectedErrors > 0) {
-        std::cout << "? ТЕСТ ПРОЙДЕН УСПЕШНО (ошибки обнаружены корректно)!\n";
-    } else {
-        std::cout << "? ТЕСТ НЕ ПРОЙДЕН (несоответствие количества ошибок)\n";
-    }
+    cout << "\n" << string(60, '=') << "\n";
 }
 
 int main() {
-
     setlocale(LC_ALL, "Russian");
-    std::cout << "????????????????????????????????????????????????????????????\n";
-    std::cout << "?         ТЕСТИРОВАНИЕ КЛАССА TFormula (Стек)             ?\n";
-    std::cout << "????????????????????????????????????????????????????????????\n";
+    
+    cout << "========================================\n";
+    cout << "    ТЕСТИРОВАНИЕ КЛАССА TFormula\n";
+    cout << "========================================\n";
     
     // ========== ТЕСТ 1: Простое сложение ==========
-    std::cout << "\n???????????????????????????????????????????????????????????\n";
-    std::cout << "? ТЕСТ 1: 1+2                                              ?\n";
-    std::cout << "???????????????????????????????????????????????????????????\n";
+    cout << "\n========== ТЕСТ 1: 1+2 ==========\n";
     {
         TFormula f(const_cast<char*>("1+2"));
         int brackets[255];
         int errCount = 0;
         int errors = f.FormulaChecker(brackets, errCount);
-        std::cout << "Ошибок в скобках: " << errors << "\n";
+        cout << "Ошибок в скобках: " << errors << "\n";
         
         if (errors == 0) {
             f.FormulaConverter();
             double res = f.FormulaCalculator();
-            std::cout << "Постфиксная форма: 1 2 +\n";
-            std::cout << "Результат: " << res << "\n";
-            if (std::abs(res - 3.0) < 0.0001) {
-                std::cout << "? Тест 1 пройден\n";
+            cout << "Результат: " << res << "\n";
+            if (fabs(res - 3.0) < 0.0001) {
+                cout << "--> Тест 1 пройден\n";
+            } else {
+                cout << "--> Тест 1 не пройден (результат " << res << " != 3)\n";
             }
+        } else {
+            cout << "--> Тест 1 не пройден (ошибки в скобках)\n";
         }
     }
     
     // ========== ТЕСТ 2: Сложное выражение ==========
-    std::cout << "\n???????????????????????????????????????????????????????????\n";
-    std::cout << "? ТЕСТ 2: 1+2*(3-2)-4                                      ?\n";
-    std::cout << "???????????????????????????????????????????????????????????\n";
+    cout << "\n========== ТЕСТ 2: 1+2*(3-2)-4 ==========\n";
     {
         TFormula f(const_cast<char*>("1+2*(3-2)-4"));
         int brackets[255];
         int errCount = 0;
         int errors = f.FormulaChecker(brackets, errCount);
-        std::cout << "Ошибок в скобках: " << errors << "\n";
+        cout << "Ошибок в скобках: " << errors << "\n";
         
         if (errors == 0) {
             f.FormulaConverter();
             double res = f.FormulaCalculator();
-            std::cout << "Постфиксная форма: 1 2 3 2 - * + 4 -\n";
-            std::cout << "Результат: " << res << "\n";
-            if (std::abs(res - (-1.0)) < 0.0001) {
-                std::cout << "? Тест 2 пройден\n";
+            cout << "Результат: " << res << "\n";
+            if (fabs(res - (-1.0)) < 0.0001) {
+                cout << "--> Тест 2 пройден\n";
+            } else {
+                cout << "--> Тест 2 не пройден (результат " << res << " != -1)\n";
             }
+        } else {
+            cout << "--> Тест 2 не пройден (ошибки в скобках)\n";
         }
     }
     
     // ========== ТЕСТ 3: Ошибка в скобках ==========
-    std::cout << "\n???????????????????????????????????????????????????????????\n";
-    std::cout << "? ТЕСТ 3: (((1+23)*1-22)+5)*2-(7                           ?\n";
-    std::cout << "???????????????????????????????????????????????????????????\n";
+    cout << "\n========== ТЕСТ 3: (((1+23)*1-22)+5)*2-(7 ==========\n";
     {
         TFormula f(const_cast<char*>("(((1+23)*1-22)+5)*2-(7"));
         int brackets[255];
         int errCount = 0;
         int errors = f.FormulaChecker(brackets, errCount);
-        std::cout << "Ошибок в скобках: " << errors << "\n";
+        cout << "Ошибок в скобках: " << errors << "\n";
         
         if (errors == 1) {
-            std::cout << "? Тест 3 пройден (ошибка обнаружена)\n";
-            std::cout << "Перевод и вычисление невозможны\n";
+            cout << "--> Тест 3 пройден (ошибка обнаружена)\n";
         } else {
-            std::cout << "? Тест 3 не пройден (ожидалась 1 ошибка)\n";
+            cout << "--> Тест 3 не пройден (ожидалась 1 ошибка, получено " << errors << ")\n";
         }
     }
     
-    // ========== ДОПОЛНИТЕЛЬНЫЙ ТЕСТ 4: Корректное сложное выражение ==========
-    std::cout << "\n???????????????????????????????????????????????????????????\n";
-    std::cout << "? ДОП. ТЕСТ 4: Исправленная версия теста 3                 ?\n";
-    std::cout << "???????????????????????????????????????????????????????????\n";
+    // ========== ТЕСТ 4: Корректное выражение со скобками ==========
+    cout << "\n========== ТЕСТ 4: (((1+23)*1-22)+5)*2-7 ==========\n";
     {
         TFormula f(const_cast<char*>("(((1+23)*1-22)+5)*2-7"));
         int brackets[255];
         int errCount = 0;
         int errors = f.FormulaChecker(brackets, errCount);
-        std::cout << "Ошибок в скобках: " << errors << "\n";
+        cout << "Ошибок в скобках: " << errors << "\n";
         
         if (errors == 0) {
             f.FormulaConverter();
             double res = f.FormulaCalculator();
-            // (((1+23)*1-22)+5)*2-7 = ((24-22)+5)*2-7 = (2+5)*2-7 = 14-7 = 7
-            std::cout << "Результат: " << res << " (ожидается 7)\n";
-            if (std::abs(res - 7.0) < 0.0001) {
-                std::cout << "? Доп. тест 4 пройден\n";
+            cout << "Результат: " << res << " (ожидается 7)\n";
+            if (fabs(res - 7.0) < 0.0001) {
+                cout << "--> Тест 4 пройден\n";
+            } else {
+                cout << "--> Тест 4 не пройден (результат " << res << " != 7)\n";
+            }
+        } else {
+            cout << "--> Тест 4 не пройден (ошибки в скобках)\n";
+        }
+    }
+    
+    // ========== ТЕСТ 5: Деление на ноль ==========
+    cout << "\n========== ТЕСТ 5: 1+2/(3-3) ==========\n";
+    {
+        TFormula f(const_cast<char*>("1+2/(3-3)"));
+        int brackets[255];
+        int errCount = 0;
+        int errors = f.FormulaChecker(brackets, errCount);
+        cout << "Ошибок в скобках: " << errors << "\n";
+        
+        if (errors == 0) {
+            f.FormulaConverter();
+            double res = f.FormulaCalculator();
+            if (std::isinf(res) || std::isnan(res)) {
+                cout << "Результат: бесконечность/не число\n";
+                cout << "--> Тест 5 пройден (деление на ноль)\n";
+            } else {
+                cout << "Результат: " << res << "\n";
+                cout << "--> Тест 5 не пройден (деление на ноль не обнаружено)\n";
             }
         }
     }
     
-    std::cout << "\n" << std::string(60, '?') << "\n";
-    std::cout << "                ТЕСТИРОВАНИЕ ЗАВЕРШЕНО\n";
-    std::cout << std::string(60, '?') << "\n";
+    // ========== ТЕСТ 6: Два оператора подряд ==========
+    cout << "\n========== ТЕСТ 6: 1++1 ==========\n";
+    {
+        TFormula f(const_cast<char*>("1++1"));
+        int brackets[255];
+        int errCount = 0;
+        int errors = f.FormulaChecker(brackets, errCount);
+        cout << "Ошибок в скобках: " << errors << "\n";
+        
+        if (errors == 0) {
+            f.FormulaConverter();
+            double res = f.FormulaCalculator();
+            cout << "Результат: " << res << "\n";
+            cout << "--> Тест 6 завершён (проверьте корректность)\n";
+        }
+    }
+    
+    // ========== ТЕСТ 7: Проверка со скобками из методички ==========
+    cout << "\n========== ТЕСТ 7: (a+b1)/2+6.5)*(4.8+sin(x) ==========\n";
+    {
+        TFormula f(const_cast<char*>("(a+b1)/2+6.5)*(4.8+sin(x)"));
+        int brackets[255];
+        int errCount = 0;
+        int errors = f.FormulaChecker(brackets, errCount);
+        cout << "Ошибок в скобках: " << errors << "\n";
+        
+        if (errors == 2) {
+            cout << "--> Тест 7 пройден (обнаружено 2 ошибки в скобках)\n";
+        } else {
+            cout << "--> Тест 7 не пройден (ожидалось 2 ошибки, получено " << errors << ")\n";
+        }
+    }
+    
+    cout << "\n========================================\n";
+    cout << "            ТЕСТИРОВАНИЕ ЗАВЕРШЕНО\n";
+    cout << "========================================\n";
     
     return 0;
 }
