@@ -13,13 +13,9 @@ int TJobStream::GetNewJob() {
     int r = rand() % 100;
     
     if (r < JobIntåns * 100.00) {
-        cout <<"q = " << r<< " ïîñòóïèëà \n"<< endl;
-        cout <<"Ïîðîã = " << JobIntåns * 100.00 << " \n"<< endl;
-        
-
+        cout <<"q1 = " << r<<" Ïîðîã = "  << JobIntåns * 100.00 <<" Çàäà÷à ïîñòóïèëà"<< endl;        
         return 1;  
     } 
-    cout <<"q = " << r<< " ÍÅ ïîñòóïèëà \n"<< endl;
-    cout <<"Ïîðîã = " << JobIntåns * 100.00 << " \n"<< endl;
+    cout <<"q1 = " << r<<" Ïîðîã = "  << JobIntåns * 100.00 <<" Çàäà÷à ÍÅ ïîñòóïèëà \n"<< endl;
     return 0;  
 }
