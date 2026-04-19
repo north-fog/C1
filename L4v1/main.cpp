@@ -41,7 +41,7 @@ int main() {
     int totalExecTime = 0;    // суммарное время выполнения
     
     // Для пошагового вывода
-    bool stepByStep = (TotalTicks <= 50);
+    bool stepByStep = (TotalTicks <= 100);
     
     cout << "\n--- НАЧАЛО ИМИТАЦИИ ---\n" << endl;
     
@@ -73,15 +73,32 @@ int main() {
                     cout << "  ОТКАЗ: очередь переполнена, задание #" << jobId << " потеряно" << endl;
                 }
             }
+            if (stepByStep) {
+            cout << "  Очередь: ";
+            if (queue.IsEmpty()) {
+                cout << "пуста";
+            } else {
+                // Создаем копию для просмотра
+                TQueue temp(queue);
+                cout << "[";
+                while (!temp.IsEmpty()) {
+                    cout << " " << temp.Get();
+                }
+                cout << " ]";
+            }
+            cout << " (размер: " << queue.GetDataCount() << ")" << endl;
+        }
+            
+            
         }
         
         // 2. ОБСЛУЖИВАНИЕ ПРОЦЕССОРОМ
         // Проверяем, закончилось ли текущее задание
         if (processor.IsProcBusy()) {
             // С вероятностью ProcPower задание завершается
-            int finish = (rand() % 100) < ProcPower;
-            
-            if (finish) {
+            int finish = (rand() % 100) ;
+            cout<<"  ЧислоРНД = "<< finish << " Q2 = "<< ProcPower<< " Выполнится ли -  "<<(finish < ProcPower)<< endl;
+            if (finish < ProcPower ) {
                 if (stepByStep) {
                     cout << "  Процессор завершил выполнение задания" << endl;
                 }
