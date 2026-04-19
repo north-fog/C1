@@ -1,6 +1,5 @@
 
-#define TSTACK_H
-
+#pragma once
 typedef int TElem; // Тип элементов (идентификатор задания)
 
 class TStack {

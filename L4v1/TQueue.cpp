@@ -9,7 +9,7 @@ TQueue::TQueue(int Size) : TStack(Size) {
 }
 
 int TQueue::GetNextIndex(int index) {
-    return (index + 1) % MemSize;
+    return  ++ index % MemSize ;
 }
 
 void TQueue::Put(TElem val) {

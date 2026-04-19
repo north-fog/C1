@@ -44,11 +44,11 @@ int TFormula::FormulaChecker(int Brackets[],int size){
             stack.Put(i);
         }
         else if (Formula[i]==')'){
-    if(stack.IsEmpty()){
-        Brackets[errorcount]=i; 
-        errorcount++;
-    } else {
-        stack.Get();  
+            if(stack.IsEmpty()){
+                Brackets[errorcount]=i; 
+                errorcount++;
+    }       else {
+                stack.Get();  
     }
 }
     }
@@ -94,8 +94,7 @@ int TFormula::FormulaConverter(void){
         } 
         //операторы
         else if (isOperator(c)) {
-            while (!stack.IsEmpty() && isOperator(stack.Peek()) &&
-                   priority(stack.Peek()) >= priority(c)) {
+            while (!stack.IsEmpty() && isOperator(stack.Peek()) && priority(stack.Peek()) >= priority(c)) {
                 PostfixForm[postfixindex++] = stack.Get();
                 PostfixForm[postfixindex++] = ' ';
             }
@@ -129,8 +128,6 @@ double TFormula::FormulaCalculator() {
         
         if (isDigit(c)) {
             int num = 0;
-    
-    
             while (i < len && isDigit(PostfixForm[i])) {
                 num = num * 10 + (PostfixForm[i] - '0');
                 i++;

@@ -1,5 +1,4 @@
-
-#define TQUEUE_H
+#pragma once
 
 #include "TStack.h"
 
@@ -7,7 +6,7 @@ class TQueue : public TStack {
 protected:
     int Li; // Индекс начала очереди
 
-    virtual int GetNextIndex(int index); // Получить следующий индекс (кольцевой буфер)
+    int GetNextIndex(int index); // Получить следующий индекс (кольцевой буфер)
 
 public:
     TQueue(int Size);          // Конструктор

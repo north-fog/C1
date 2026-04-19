@@ -10,7 +10,7 @@ int TJobStream::GetNewJob() {
     int r = rand() % 100;
 
     if (r < JobIntеns * 100) {
-        return 1;  // задание появилось
+        return 1;  
     } 
-    return 0;  // задание не появилось
+    return 0;  
 }
