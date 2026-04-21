@@ -1,5 +1,5 @@
 #include <iostream>
-#include "TList.h"
+#include "TDatList.h"
 using namespace std;
 
 // ѕростой класс значени€ дл€ тестировани€ (аналог TMonom)

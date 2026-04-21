@@ -1,5 +1,5 @@
 #pragma once
-#include "TLink.h"
+#include "TDatLink.h"
 
 // Класс линейного списка
 class TList {
@@ -34,7 +34,6 @@ public:
     // Количество звеньев
     int GetLength() const { return len; }
     
-    // ========== НАВИГАЦИЯ (Итератор) ==========
     
     // Установить на начало
     void Reset() {
@@ -57,8 +56,7 @@ public:
     PTDatValue GetCurrent() const {
         return (pCurr != nullptr) ? pCurr->GetValue() : nullptr;
     }
-    
-    // ========== ВСТАВКА ==========
+
     
     // Вставка в начало
     void InsFirst(PTDatValue pVal) {
@@ -108,7 +106,6 @@ public:
         len++;
     }
     
-    // ========== УДАЛЕНИЕ ==========
     
     // Удаление первого звена
     void DelFirst() {
@@ -157,7 +154,6 @@ public:
         len--;
     }
     
-    // ========== ДОСТУП К ЗНАЧЕНИЯМ ==========
     
     // Получить значение первого звена
     PTDatValue GetFirst() const {
