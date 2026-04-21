@@ -34,7 +34,7 @@ TPolinom::TPolinom(int monoms[][2], int km) {
 TPolinom::TPolinom(const TPolinom& q) : THeadRing() {
     PTDatLink p = static_cast<PTDatLink>(q.pFirst->GetNextLink());
     while (p != nullptr) {
-        TMonom* pM = static_cast<TMonom*>(p->GetDatValue()->GetCop  y());
+        TMonom* pM = static_cast<TMonom*>(p->GetDatValue()->GetCopy());
         InsLast(pM);
         p = static_cast<PTDatLink>(p->GetNextLink());
     }
